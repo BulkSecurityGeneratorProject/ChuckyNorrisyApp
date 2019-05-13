@@ -1,8 +1,68 @@
 <div class="row">
-    <div class="col-md-3">
+
+    <div class="col-md-2 nav-container" *ngIf="account">
+
+    </div>
+
+
+    <div class="col-md-8" *ngIf="account">
+        <div id="title-container">
+            <span class="display-4">Chuck Norris Fact Generator</span>
+        </div>
+        <br>
+
+        <div id="list-container">
+            <div class="row">
+                <div class="col-6">
+                    <h3> Generated List </h3>
+                </div>
+                <div class="col-6">
+                    <md-icon id="refreshBtn" class="float-right material-icons align-bottom" style="font-size: 36px; cursor: pointer" (click)="refresh()">refresh</md-icon>
+                    <input class="float-right" id="numFacts" type="number" max="50" min="0" [value]="numFacts" (input)="numFacts = $event.target.value">
+                    <div class="float-right loader" *ngIf="loading"></div>
+                </div>
+            </div>
+            <div id="list-div">
+                <ul style="list-style-type:none;">
+                    <li *ngFor="let key of Object.keys(facts)">
+                        <div class="fact-row" id="{{facts[key].id}}" (click)="favorite($event)">
+                            <md-icon class="material-icons align-bottom" *ngIf="facts[key].favorited">grade</md-icon>
+                            <md-icon class="material-icons align-bottom" *ngIf="!facts[key].favorited">arrow_right</md-icon>
+                            <span class="fact_text">{{facts[key].value}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <md-icon class="dropdown-icon material-icons align-bottom" *ngIf="!showFavorites">arrow_right</md-icon>
+                        <md-icon class="dropdown-icon material-icons align-bottom " *ngIf="showFavorites">arrow_drop_down</md-icon>
+                        <h3 id="favoriteList" (click)="showFavorites = !showFavorites"> Favorited List ({{Object.keys(facts_fav).length}})</h3>
+                    </div>
+                </div>
+            </div>
+            <div id="list-div-fav" *ngIf="showFavorites">
+                <ul style="list-style-type:none;">
+                    <li *ngFor="let key of Object.keys(facts_fav)">
+                        <div class="fact-row" *ngIf="facts_fav[key].favorited" id="{{facts_fav[key].id}}">
+                            <md-icon class="material-icons align-bottom" *ngIf="facts_fav[key].favorited">grade</md-icon>
+                            <span class="fact_text">{{facts_fav[key].value}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-3" *ngIf="!account">
         <span class="hipster img-fluid rounded"></span>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" *ngIf="!account">
         <h1 class="display-4">Welcome, Java Hipster!</h1>
         <p class="lead">This is your homepage</p>
 
@@ -39,3 +99,56 @@
         </p>
     </div>
 </div>
+
+<style>
+
+div.fact-row:hover{
+    background: lightskyblue;
+    cursor: pointer;
+    transition: background-color 500ms;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    display: inline-block;
+    margin-bottom: -8px;
+    margin-right: 8px;
+}
+
+.dropdown-icon {
+    margin-top: 8px;
+
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#numFacts {
+    margin-bottom: 3px;
+}
+#refreshBtn {
+    margin-top: -4px;
+}
+#favoriteList {
+    cursor: pointer;
+}
+
+
+</style>
